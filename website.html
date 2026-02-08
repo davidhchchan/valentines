@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Will You Be My Valentine? 💌</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #c9456d;
+    --rose-deep: #9e2a4a;
+    --blush: #f5d0d6;
+    --cream: #fdf6f0;
+    --gold: #d4a853;
+    --gold-light: #f0dbb4;
+    --wine: #5c1a2a;
+    --petal: #f8e0e6;
+    --warm-white: #fff9f5;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Cormorant Garamond', serif;
+    background: var(--cream);
+    color: var(--wine);
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* Floating hearts background */
+  .hearts-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .floating-heart {
+    position: absolute;
+    font-size: 1.2rem;
+    opacity: 0;
+    animation: floatUp linear infinite;
+    color: var(--rose);
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(100vh) rotate(0deg) scale(0.5); opacity: 0; }
+    10% { opacity: 0.3; }
+    90% { opacity: 0.15; }
+    100% { transform: translateY(-10vh) rotate(360deg) scale(1); opacity: 0; }
+  }
+
+  /* Sections */
+  .section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    padding: 60px 24px;
+  }
+
+  /* Hero */
+  .hero {
+    background: radial-gradient(ellipse at 30% 20%, var(--petal) 0%, var(--cream) 50%, var(--warm-white) 100%);
+    text-align: center;
+  }
+
+  .envelope-icon {
+    font-size: 4rem;
+    animation: gentleBounce 2s ease-in-out infinite;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 4px 12px rgba(201, 69, 109, 0.2));
+  }
+
+  @keyframes gentleBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    font-weight: 700;
+    color: var(--rose-deep);
+    line-height: 1.15;
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeSlideUp 1s ease forwards 0.3s;
+  }
+
+  .hero h1 .script {
+    font-family: 'Dancing Script', cursive;
+    color: var(--rose);
+    font-size: 1.15em;
+    display: block;
+  }
+
+  .hero .subtitle {
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--rose);
+    opacity: 0;
+    animation: fadeSlideUp 1s ease forwards 0.7s;
+    max-width: 500px;
+    line-height: 1.6;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    opacity: 0;
+    animation: fadeSlideUp 1s ease forwards 1.2s;
+    font-size: 0.95rem;
+    color: var(--rose);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .scroll-hint span {
+    display: block;
+    animation: gentleBounce 2s ease-in-out infinite;
+    margin-top: 8px;
+    font-size: 1.4rem;
+  }
+
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Gallery Section */
+  .gallery-section {
+    background: linear-gradient(180deg, var(--warm-white) 0%, var(--petal) 50%, var(--warm-white) 100%);
+    padding: 80px 24px;
+  }
+
+  .gallery-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    color: var(--rose-deep);
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .gallery-section .section-sub {
+    font-style: italic;
+    color: var(--rose);
+    font-size: 1.15rem;
+    margin-bottom: 40px;
+    text-align: center;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+    max-width: 1000px;
+    width: 100%;
+    margin-bottom: 40px;
+  }
+
+  .gallery-item {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    aspect-ratio: 4/5;
+    background: var(--blush);
+    box-shadow: 0 8px 32px rgba(158, 42, 74, 0.12);
+    cursor: pointer;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    border: 3px solid rgba(212, 168, 83, 0.2);
+  }
+
+  .gallery-item:hover {
+    transform: translateY(-6px) rotate(-1deg);
+    box-shadow: 0 16px 48px rgba(158, 42, 74, 0.2);
+  }
+
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+
+  .gallery-item:hover img {
+    transform: scale(1.05);
+  }
+
+  .gallery-item .caption-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 40px 16px 16px;
+    background: linear-gradient(transparent, rgba(92, 26, 42, 0.7));
+    color: white;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.2rem;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .gallery-item:hover .caption-overlay {
+    opacity: 1;
+  }
+
+  .gallery-item .remove-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(92, 26, 42, 0.6);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s, background 0.3s;
+    backdrop-filter: blur(4px);
+  }
+
+  .gallery-item:hover .remove-btn {
+    opacity: 1;
+  }
+
+  .gallery-item .remove-btn:hover {
+    background: var(--rose-deep);
+  }
+
+  /* Upload area */
+  .upload-area {
+    border: 2px dashed var(--rose);
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(8px);
+  }
+
+  .upload-area:hover, .upload-area.dragover {
+    border-color: var(--gold);
+    background: rgba(245, 208, 214, 0.3);
+    transform: scale(1.02);
+  }
+
+  .upload-area .upload-icon {
+    font-size: 3rem;
+    margin-bottom: 12px;
+  }
+
+  .upload-area p {
+    font-size: 1.1rem;
+    color: var(--rose-deep);
+  }
+
+  .upload-area .hint {
+    font-size: 0.9rem;
+    color: var(--rose);
+    margin-top: 8px;
+    font-style: italic;
+  }
+
+  .caption-input {
+    margin-top: 16px;
+    display: flex;
+    gap: 12px;
+    max-width: 500px;
+    width: 100%;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    transition: all 0.4s ease;
+  }
+
+  .caption-input.visible {
+    opacity: 1;
+    height: auto;
+    margin-top: 16px;
+  }
+
+  .caption-input input {
+    flex: 1;
+    padding: 12px 20px;
+    border: 2px solid var(--blush);
+    border-radius: 50px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    color: var(--wine);
+    outline: none;
+    background: white;
+    transition: border-color 0.3s;
+  }
+
+  .caption-input input:focus {
+    border-color: var(--rose);
+  }
+
+  .caption-input button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 50px;
+    background: var(--rose);
+    color: white;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+  }
+
+  .caption-input button:hover {
+    background: var(--rose-deep);
+    transform: scale(1.05);
+  }
+
+  /* The Question Section */
+  .question-section {
+    background: radial-gradient(ellipse at 50% 40%, var(--petal) 0%, var(--cream) 60%);
+    text-align: center;
+    min-height: 100vh;
+  }
+
+  .question-section h2 {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(2.5rem, 7vw, 4.5rem);
+    color: var(--rose-deep);
+    margin-bottom: 50px;
+    line-height: 1.3;
+  }
+
+  .question-section h2 .highlight {
+    color: var(--rose);
+    position: relative;
+  }
+
+  .question-section h2 .highlight::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gold);
+    border-radius: 2px;
+  }
+
+  .buttons-container {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .valentine-btn {
+    padding: 20px 60px;
+    border: none;
+    border-radius: 60px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    letter-spacing: 1px;
+  }
+
+  .btn-yes {
+    background: linear-gradient(135deg, var(--rose), var(--rose-deep));
+    color: white;
+    box-shadow: 0 8px 32px rgba(201, 69, 109, 0.35);
+  }
+
+  .btn-yes:hover {
+    transform: scale(1.1);
+    box-shadow: 0 12px 40px rgba(201, 69, 109, 0.5);
+  }
+
+  .btn-no {
+    background: white;
+    color: var(--rose);
+    border: 2px solid var(--blush);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    transition: all 0.15s ease;
+  }
+
+  /* Celebration overlay */
+  .celebration {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: radial-gradient(ellipse at center, rgba(253, 246, 240, 0.97), rgba(248, 224, 230, 0.97));
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px;
+  }
+
+  .celebration.active {
+    display: flex;
+    animation: fadeIn 0.6s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .celebration .big-heart {
+    font-size: 6rem;
+    animation: heartPulse 0.8s ease-in-out infinite;
+    margin-bottom: 24px;
+  }
+
+  @keyframes heartPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+  }
+
+  .celebration h2 {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    color: var(--rose-deep);
+    margin-bottom: 16px;
+  }
+
+  .celebration p {
+    font-size: 1.4rem;
+    color: var(--rose);
+    font-style: italic;
+    max-width: 500px;
+    line-height: 1.6;
+  }
+
+  .celebration-hearts {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1001;
+  }
+
+  .burst-heart {
+    position: absolute;
+    font-size: 2rem;
+    animation: burstOut 2s ease-out forwards;
+  }
+
+  @keyframes burstOut {
+    0% { transform: translate(0, 0) scale(0) rotate(0deg); opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) scale(1.5) rotate(var(--rot)); opacity: 0; }
+  }
+
+  /* Lightbox */
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    background: rgba(92, 26, 42, 0.85);
+    backdrop-filter: blur(12px);
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 40px;
+  }
+
+  .lightbox.active {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .lightbox img {
+    max-width: 90%;
+    max-height: 85vh;
+    border-radius: 16px;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.4);
+    object-fit: contain;
+  }
+
+  .lightbox .lb-caption {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.5rem;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  }
+
+  /* Gold divider */
+  .divider {
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 20px auto;
+  }
+
+  /* No images placeholder */
+  .empty-gallery {
+    text-align: center;
+    padding: 40px;
+    color: var(--rose);
+    font-style: italic;
+    font-size: 1.1rem;
+  }
+
+  .empty-gallery .empty-icon {
+    font-size: 3rem;
+    margin-bottom: 12px;
+    opacity: 0.5;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .gallery-grid {
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .buttons-container { gap: 20px; }
+    .valentine-btn { padding: 16px 44px; font-size: 1.25rem; }
+    .upload-area { padding: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Floating hearts bg -->
+<div class="hearts-bg" id="heartsBg"></div>
+
+<!-- HERO -->
+<section class="section hero">
+  <div class="envelope-icon">💌</div>
+  <h1>
+    I have a question...
+    <span class="script">for you</span>
+  </h1>
+  <div class="divider"></div>
+  <p class="subtitle">Scroll down to see something I made just for you</p>
+  <div class="scroll-hint">
+    scroll
+    <span>↓</span>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="section gallery-section" id="gallerySection">
+  <h2>Our Favorite Moments</h2>
+  <p class="section-sub">every picture tells our story</p>
+
+  <div class="gallery-grid" id="galleryGrid">
+    <div class="empty-gallery" id="emptyGallery">
+      <div class="empty-icon">📸</div>
+      <p>Upload your favorite photos together below!</p>
+    </div>
+  </div>
+
+  <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+    <div class="upload-icon">📷</div>
+    <p>Tap or drag photos here</p>
+    <p class="hint">Add your favorite memories together</p>
+  </div>
+  <input type="file" id="fileInput" accept="image/*" multiple style="display:none">
+
+  <div class="caption-input" id="captionInput">
+    <input type="text" id="captionText" placeholder="Add a sweet caption..." />
+    <button onclick="confirmUpload()">Add ♥</button>
+  </div>
+</section>
+
+<!-- THE QUESTION -->
+<section class="section question-section" id="questionSection">
+  <h2>So... <br><span class="highlight">Will you be my Valentine?</span> 💕</h2>
+  <div class="buttons-container">
+    <button class="valentine-btn btn-yes" onclick="sayYes()">Yes! 💖</button>
+    <button class="valentine-btn btn-no" id="noBtn" onmouseover="dodgeNo()" onclick="dodgeNo()">No</button>
+  </div>
+</section>
+
+<!-- CELEBRATION -->
+<div class="celebration" id="celebration">
+  <div class="big-heart">💖</div>
+  <h2>You've made me the happiest!</h2>
+  <div class="divider"></div>
+  <p>I can't wait to spend Valentine's Day with you. You mean the world to me. 🥰</p>
+  <div class="celebration-hearts" id="celebrationHearts"></div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lightboxImg" src="" alt="">
+  <div class="lb-caption" id="lightboxCaption"></div>
+</div>
+
+<script>
+  // Floating hearts
+  const heartsBg = document.getElementById('heartsBg');
+  const heartChars = ['♥', '♡', '❤', '💕', '💗'];
+  for (let i = 0; i < 20; i++) {
+    const heart = document.createElement('div');
+    heart.className = 'floating-heart';
+    heart.textContent = heartChars[Math.floor(Math.random() * heartChars.length)];
+    heart.style.left = Math.random() * 100 + '%';
+    heart.style.animationDuration = (8 + Math.random() * 12) + 's';
+    heart.style.animationDelay = Math.random() * 15 + 's';
+    heart.style.fontSize = (0.8 + Math.random() * 1.2) + 'rem';
+    heartsBg.appendChild(heart);
+  }
+
+  // Gallery state
+  let photos = [];
+  let pendingFiles = [];
+
+  const galleryGrid = document.getElementById('galleryGrid');
+  const emptyGallery = document.getElementById('emptyGallery');
+  const uploadArea = document.getElementById('uploadArea');
+  const fileInput = document.getElementById('fileInput');
+  const captionInput = document.getElementById('captionInput');
+  const captionText = document.getElementById('captionText');
+
+  // Drag and drop
+  uploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadArea.classList.add('dragover');
+  });
+  uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+  uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadArea.classList.remove('dragover');
+    handleFiles(e.dataTransfer.files);
+  });
+
+  fileInput.addEventListener('change', () => {
+    handleFiles(fileInput.files);
+    fileInput.value = '';
+  });
+
+  function handleFiles(files) {
+    pendingFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
+    if (pendingFiles.length > 0) {
+      captionInput.classList.add('visible');
+      captionText.value = '';
+      captionText.focus();
+    }
+  }
+
+  function confirmUpload() {
+    const caption = captionText.value.trim();
+    pendingFiles.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        photos.push({ src: e.target.result, caption: caption });
+        renderGallery();
+      };
+      reader.readAsDataURL(file);
+    });
+    pendingFiles = [];
+    captionInput.classList.remove('visible');
+  }
+
+  // Press enter to confirm
+  captionText.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') confirmUpload();
+  });
+
+  function renderGallery() {
+    galleryGrid.innerHTML = '';
+    if (photos.length === 0) {
+      galleryGrid.innerHTML = `
+        <div class="empty-gallery" id="emptyGallery">
+          <div class="empty-icon">📸</div>
+          <p>Upload your favorite photos together below!</p>
+        </div>`;
+      return;
+    }
+    photos.forEach((photo, i) => {
+      const item = document.createElement('div');
+      item.className = 'gallery-item';
+      item.innerHTML = `
+        <img src="${photo.src}" alt="Memory ${i+1}" onclick="openLightbox(${i})">
+        ${photo.caption ? `<div class="caption-overlay">${photo.caption}</div>` : ''}
+        <button class="remove-btn" onclick="event.stopPropagation();removePhoto(${i})">×</button>
+      `;
+      item.style.animation = `fadeSlideUp 0.5s ease forwards ${i * 0.1}s`;
+      item.style.opacity = '0';
+      galleryGrid.appendChild(item);
+    });
+  }
+
+  function removePhoto(index) {
+    photos.splice(index, 1);
+    renderGallery();
+  }
+
+  // Lightbox
+  function openLightbox(index) {
+    const lb = document.getElementById('lightbox');
+    document.getElementById('lightboxImg').src = photos[index].src;
+    document.getElementById('lightboxCaption').textContent = photos[index].caption || '';
+    lb.classList.add('active');
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+  }
+
+  // THE NO BUTTON - runs away!
+  let noAttempts = 0;
+  const noBtn = document.getElementById('noBtn');
+  const noTexts = ["No", "Are you sure?", "Really?? 🥺", "Think again!", "Pleeeease?", "💔", "Pretty please?", "I'll be sad...", "Last chance!"];
+
+  function dodgeNo() {
+    noAttempts++;
+
+    // Change text
+    if (noAttempts < noTexts.length) {
+      noBtn.textContent = noTexts[noAttempts];
+    }
+
+    // Make it smaller
+    const scale = Math.max(0.4, 1 - noAttempts * 0.08);
+    noBtn.style.transform = `scale(${scale})`;
+
+    // Move it to random position
+    const container = document.getElementById('questionSection');
+    const rect = container.getBoundingClientRect();
+    const btnRect = noBtn.getBoundingClientRect();
+
+    const maxX = rect.width - btnRect.width - 40;
+    const maxY = rect.height - btnRect.height - 40;
+
+    const randomX = Math.random() * maxX - maxX / 2;
+    const randomY = Math.random() * maxY / 2 - maxY / 4;
+
+    noBtn.style.position = 'relative';
+    noBtn.style.left = randomX + 'px';
+    noBtn.style.top = randomY + 'px';
+
+    // Make yes button bigger
+    const yesBtn = document.querySelector('.btn-yes');
+    const yesScale = Math.min(1.4, 1 + noAttempts * 0.05);
+    yesBtn.style.transform = `scale(${yesScale})`;
+  }
+
+  // YES - Celebration!
+  function sayYes() {
+    const celebration = document.getElementById('celebration');
+    celebration.classList.add('active');
+
+    // Burst hearts
+    const heartsContainer = document.getElementById('celebrationHearts');
+    for (let i = 0; i < 40; i++) {
+      setTimeout(() => {
+        const heart = document.createElement('div');
+        heart.className = 'burst-heart';
+        heart.textContent = heartChars[Math.floor(Math.random() * heartChars.length)];
+        heart.style.left = '50%';
+        heart.style.top = '50%';
+        heart.style.setProperty('--tx', (Math.random() - 0.5) * window.innerWidth + 'px');
+        heart.style.setProperty('--ty', (Math.random() - 0.5) * window.innerHeight + 'px');
+        heart.style.setProperty('--rot', (Math.random() * 720 - 360) + 'deg');
+        heart.style.fontSize = (1.5 + Math.random() * 2.5) + 'rem';
+        heartsContainer.appendChild(heart);
+        setTimeout(() => heart.remove(), 2000);
+      }, i * 60);
+    }
+
+    // Continuous smaller bursts
+    setInterval(() => {
+      for (let i = 0; i < 5; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'burst-heart';
+        heart.textContent = heartChars[Math.floor(Math.random() * heartChars.length)];
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.top = Math.random() * 100 + '%';
+        heart.style.setProperty('--tx', (Math.random() - 0.5) * 300 + 'px');
+        heart.style.setProperty('--ty', (Math.random() - 0.5) * 300 + 'px');
+        heart.style.setProperty('--rot', (Math.random() * 360) + 'deg');
+        heartsContainer.appendChild(heart);
+        setTimeout(() => heart.remove(), 2000);
+      }
+    }, 1500);
+  }
+
+  // Keyboard shortcut: Escape to close lightbox
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+</script>
+
+</body>
+</html>
