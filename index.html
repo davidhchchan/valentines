@@ -6,6 +6,37 @@
 <title>Will You Be My Valentine? 💌</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
 <style>
+  /* Scattered photos */
+.scattered-photos {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  min-height: 300px;
+  margin: 40px auto;
+}
+
+.scattered-photo {
+  position: absolute;
+  width: 180px;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(158, 42, 74, 0.15);
+  border: 4px solid white;
+  object-fit: cover;
+  aspect-ratio: 3/4;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.scattered-photo:hover {
+  transform: scale(1.08) !important;
+  box-shadow: 0 16px 48px rgba(158, 42, 74, 0.25);
+  z-index: 10;
+}
+
+@media (max-width: 600px) {
+  .scattered-photo { width: 120px; }
+  .scattered-photos { min-height: 250px; }
+}
+  
   :root {
     --rose: #c9456d;
     --rose-deep: #9e2a4a;
@@ -562,30 +593,11 @@
   </div>
 </section>
 
-<!-- GALLERY -->
-<section class="section gallery-section" id="gallerySection">
-  <h2>Our Favorite Moments</h2>
-  <p class="section-sub">every picture tells our story</p>
-
-  <div class="gallery-grid" id="galleryGrid">
-    <div class="empty-gallery" id="emptyGallery">
-      <div class="empty-icon">📸</div>
-      <p>Upload your favorite photos together below!</p>
-    </div>
-  </div>
-
-  <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
-    <div class="upload-icon">📷</div>
-    <p>Tap or drag photos here</p>
-    <p class="hint">Add your favorite memories together</p>
-  </div>
-  <input type="file" id="fileInput" accept="image/*" multiple style="display:none">
-
-  <div class="caption-input" id="captionInput">
-    <input type="text" id="captionText" placeholder="Add a sweet caption..." />
-    <button onclick="confirmUpload()">Add ♥</button>
-  </div>
-</section>
+<div class="scattered-photos">
+  <img class="scattered-photo" src="images/photo1.jpg" style="top: 0; left: 5%; transform: rotate(-6deg);">
+  <img class="scattered-photo" src="images/photo2.jpg" style="top: 20px; left: 35%; transform: rotate(4deg);">
+  <img class="scattered-photo" src="images/photo3.jpg" style="top: 10px; right: 5%; transform: rotate(-3deg);">
+</div>
 
 <!-- THE QUESTION -->
 <section class="section question-section" id="questionSection">
@@ -605,12 +617,6 @@
   <div class="celebration-hearts" id="celebrationHearts"></div>
 </div>
 
-<!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox" onclick="closeLightbox()">
-  <img id="lightboxImg" src="" alt="">
-  <div class="lb-caption" id="lightboxCaption"></div>
-</div>
-
 <script>
   // Floating hearts
   const heartsBg = document.getElementById('heartsBg');
@@ -624,103 +630,6 @@
     heart.style.animationDelay = Math.random() * 15 + 's';
     heart.style.fontSize = (0.8 + Math.random() * 1.2) + 'rem';
     heartsBg.appendChild(heart);
-  }
-
-  // Gallery state
-  let photos = [];
-  let pendingFiles = [];
-
-  const galleryGrid = document.getElementById('galleryGrid');
-  const emptyGallery = document.getElementById('emptyGallery');
-  const uploadArea = document.getElementById('uploadArea');
-  const fileInput = document.getElementById('fileInput');
-  const captionInput = document.getElementById('captionInput');
-  const captionText = document.getElementById('captionText');
-
-  // Drag and drop
-  uploadArea.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    uploadArea.classList.add('dragover');
-  });
-  uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
-  uploadArea.addEventListener('drop', (e) => {
-    e.preventDefault();
-    uploadArea.classList.remove('dragover');
-    handleFiles(e.dataTransfer.files);
-  });
-
-  fileInput.addEventListener('change', () => {
-    handleFiles(fileInput.files);
-    fileInput.value = '';
-  });
-
-  function handleFiles(files) {
-    pendingFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
-    if (pendingFiles.length > 0) {
-      captionInput.classList.add('visible');
-      captionText.value = '';
-      captionText.focus();
-    }
-  }
-
-  function confirmUpload() {
-    const caption = captionText.value.trim();
-    pendingFiles.forEach(file => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        photos.push({ src: e.target.result, caption: caption });
-        renderGallery();
-      };
-      reader.readAsDataURL(file);
-    });
-    pendingFiles = [];
-    captionInput.classList.remove('visible');
-  }
-
-  // Press enter to confirm
-  captionText.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') confirmUpload();
-  });
-
-  function renderGallery() {
-    galleryGrid.innerHTML = '';
-    if (photos.length === 0) {
-      galleryGrid.innerHTML = `
-        <div class="empty-gallery" id="emptyGallery">
-          <div class="empty-icon">📸</div>
-          <p>Upload your favorite photos together below!</p>
-        </div>`;
-      return;
-    }
-    photos.forEach((photo, i) => {
-      const item = document.createElement('div');
-      item.className = 'gallery-item';
-      item.innerHTML = `
-        <img src="${photo.src}" alt="Memory ${i+1}" onclick="openLightbox(${i})">
-        ${photo.caption ? `<div class="caption-overlay">${photo.caption}</div>` : ''}
-        <button class="remove-btn" onclick="event.stopPropagation();removePhoto(${i})">×</button>
-      `;
-      item.style.animation = `fadeSlideUp 0.5s ease forwards ${i * 0.1}s`;
-      item.style.opacity = '0';
-      galleryGrid.appendChild(item);
-    });
-  }
-
-  function removePhoto(index) {
-    photos.splice(index, 1);
-    renderGallery();
-  }
-
-  // Lightbox
-  function openLightbox(index) {
-    const lb = document.getElementById('lightbox');
-    document.getElementById('lightboxImg').src = photos[index].src;
-    document.getElementById('lightboxCaption').textContent = photos[index].caption || '';
-    lb.classList.add('active');
-  }
-
-  function closeLightbox() {
-    document.getElementById('lightbox').classList.remove('active');
   }
 
   // THE NO BUTTON - runs away!
@@ -801,10 +710,6 @@
     }, 1500);
   }
 
-  // Keyboard shortcut: Escape to close lightbox
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeLightbox();
-  });
 </script>
 
 </body>
